@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackGround"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <TextView
+        android:id="@+id/text_clothes"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_clothes"
+        android:text="@string/clothes"
+        android:textSize="13sp"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/text_food"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_food"
+        android:text="@string/food"
+        android:textSize="13sp"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/text_hotel"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_hotel"
+        android:text="@string/hotel"
+        android:textSize="13sp"
+        android:gravity="center_horizontal"/>
+
+</LinearLayout>
