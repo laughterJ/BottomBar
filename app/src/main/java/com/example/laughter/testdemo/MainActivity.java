@@ -1,11 +1,11 @@
 package com.example.laughter.testdemo;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -49,16 +49,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
         super.onRestoreInstanceState(savedInstanceState);
         FragmentManager mFragmentManager = getSupportFragmentManager();
         //通过FragmentManager获取保存在FragmentTransaction中的Fragment实例
-        mClothesFragment = (ClothesFragment)mFragmentManager
-                .findFragmentByTag("clothes_fragment");
-        mFoodFragment = (FoodFragment)mFragmentManager
-                .findFragmentByTag("food_fragment");
-        mHotelFragment = (HotelFragment)mFragmentManager
-                .findFragmentByTag("hotel_fragment");
+        mClothesFragment = mFragmentManager.findFragmentByTag("clothes_fragment");
+        mFoodFragment = mFragmentManager.findFragmentByTag("food_fragment");
+        mHotelFragment = mFragmentManager.findFragmentByTag("hotel_fragment");
         //恢复销毁前显示的Fragment
         setFragment(savedInstanceState.getInt("fragment_id"));
     }
@@ -82,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void init(){
         //初始化控件
-        mTextClothes = (TextView)findViewById(R.id.text_clothes);
-        mTextFood = (TextView)findViewById(R.id.text_food);
-        mTextHotel = (TextView)findViewById(R.id.text_hotel);
+        mTextClothes = findViewById(R.id.text_clothes);
+        mTextFood = findViewById(R.id.text_food);
+        mTextHotel = findViewById(R.id.text_hotel);
 
         //设置监听
         mTextClothes.setOnClickListener(this);
