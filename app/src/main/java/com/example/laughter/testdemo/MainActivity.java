@@ -13,12 +13,16 @@ import com.example.laughter.testdemo.fragment.ClothesFragment;
 import com.example.laughter.testdemo.fragment.FoodFragment;
 import com.example.laughter.testdemo.fragment.HotelFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     //底部菜单栏3个TextView
-    private TextView mTextClothes;
-    private TextView mTextFood;
-    private TextView mTextHotel;
+    @BindView(R.id.tv_clothes) TextView mTabClothes;
+    @BindView(R.id.tv_food) TextView mTabFood;
+    @BindView(R.id.tv_hotel) TextView mTabHotel;
 
     //3个Fragment
     private Fragment mClothesFragment;
@@ -26,25 +30,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment mHotelFragment;
 
     //标记当前显示的Fragment
-    private int fragmentId = 0;
+    private int mFragmentId = 0;
+
+    // 标记三个Fragment
+    public static final int FRAGMENT_CLOTHES = 0;
+    public static final int FRAGMENT_FOOD = 1;
+    public static final int FRAGMENT_HOTEL = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //初始化
-        init();
+        ButterKnife.bind(this);
         //根据传入的Bundle对象判断Activity是正常启动还是销毁重建
         if(savedInstanceState == null){
             //设置第一个Fragment默认选中
-            setFragment(0);
+            setFragment(FRAGMENT_CLOTHES);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //通过onSaveInstanceState方法保存当前显示的fragment
-        outState.putInt("fragment_id",fragmentId);
+        outState.putInt("fragment_id", mFragmentId);
         super.onSaveInstanceState(outState);
     }
 
@@ -61,33 +69,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setFragment(savedInstanceState.getInt("fragment_id"));
     }
 
-    @Override
+    @OnClick({R.id.tv_clothes, R.id.tv_food, R.id.tv_hotel})
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             default:
                 break;
-            case R.id.text_clothes:
-                setFragment(0);
+            case R.id.tv_clothes:
+                setFragment(FRAGMENT_CLOTHES);
                 break;
-            case R.id.text_food:
-                setFragment(1);
+            case R.id.tv_food:
+                setFragment(FRAGMENT_FOOD);
                 break;
-            case R.id.text_hotel:
-                setFragment(2);
+            case R.id.tv_hotel:
+                setFragment(FRAGMENT_HOTEL);
                 break;
         }
-    }
-
-    private void init(){
-        //初始化控件
-        mTextClothes = findViewById(R.id.text_clothes);
-        mTextFood = findViewById(R.id.text_food);
-        mTextHotel = findViewById(R.id.text_hotel);
-
-        //设置监听
-        mTextClothes.setOnClickListener(this);
-        mTextFood.setOnClickListener(this);
-        mTextHotel.setOnClickListener(this);
     }
 
     private void setFragment(int index){
@@ -100,46 +96,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (index){
             default:
                 break;
-            case 0:
-                fragmentId = 0;
+            case FRAGMENT_CLOTHES:
+                mFragmentId = FRAGMENT_CLOTHES;
                 //设置菜单栏为选中状态（修改文字和图片颜色）
-                mTextClothes.setTextColor(getResources()
-                        .getColor(R.color.colorTextPressed));
-                mTextClothes.setCompoundDrawablesWithIntrinsicBounds(0,
+                mTabClothes.setTextColor(getResources().getColor(R.color.colorTextPressed));
+                mTabClothes.setCompoundDrawablesWithIntrinsicBounds(0,
                         R.drawable.ic_clothes_pressed,0,0);
                 //显示对应Fragment
                 if(mClothesFragment == null){
                     mClothesFragment = new ClothesFragment();
-                    mTransaction.add(R.id.container, mClothesFragment,
-                            "clothes_fragment");
+                    mTransaction.add(R.id.container, mClothesFragment, "clothes_fragment");
                 }else {
                     mTransaction.show(mClothesFragment);
                 }
                 break;
-            case 1:
-                fragmentId = 1;
-                mTextFood.setTextColor(getResources()
-                        .getColor(R.color.colorTextPressed));
-                mTextFood.setCompoundDrawablesWithIntrinsicBounds(0,
+            case FRAGMENT_FOOD:
+                mFragmentId = FRAGMENT_FOOD;
+                mTabFood.setTextColor(getResources().getColor(R.color.colorTextPressed));
+                mTabFood.setCompoundDrawablesWithIntrinsicBounds(0,
                         R.drawable.ic_food_pressed,0,0);
                 if(mFoodFragment == null){
                     mFoodFragment = new FoodFragment();
-                    mTransaction.add(R.id.container, mFoodFragment,
-                            "food_fragment");
+                    mTransaction.add(R.id.container, mFoodFragment, "food_fragment");
                 }else {
                     mTransaction.show(mFoodFragment);
                 }
                 break;
-            case 2:
-                fragmentId = 2;
-                mTextHotel.setTextColor(getResources()
-                        .getColor(R.color.colorTextPressed));
-                mTextHotel.setCompoundDrawablesWithIntrinsicBounds(0,
+            case FRAGMENT_HOTEL:
+                mFragmentId = FRAGMENT_HOTEL;
+                mTabHotel.setTextColor(getResources().getColor(R.color.colorTextPressed));
+                mTabHotel.setCompoundDrawablesWithIntrinsicBounds(0,
                         R.drawable.ic_hotel_pressed,0,0);
                 if(mHotelFragment == null){
                     mHotelFragment = new HotelFragment();
-                    mTransaction.add(R.id.container, mHotelFragment,
-                            "hotel_fragment");
+                    mTransaction.add(R.id.container, mHotelFragment, "hotel_fragment");
                 }else {
                     mTransaction.show(mHotelFragment);
                 }
@@ -154,23 +144,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //隐藏Fragment
             transaction.hide(mClothesFragment);
             //将对应菜单栏设置为默认状态
-            mTextClothes.setTextColor(getResources()
-                    .getColor(R.color.colorText));
-            mTextClothes.setCompoundDrawablesWithIntrinsicBounds(0,
+            mTabClothes.setTextColor(getResources().getColor(R.color.colorText));
+            mTabClothes.setCompoundDrawablesWithIntrinsicBounds(0,
                     R.drawable.ic_clothes,0,0);
         }
         if(mFoodFragment != null){
             transaction.hide(mFoodFragment);
-            mTextFood.setTextColor(getResources()
-                    .getColor(R.color.colorText));
-            mTextFood.setCompoundDrawablesWithIntrinsicBounds(0,
+            mTabFood.setTextColor(getResources().getColor(R.color.colorText));
+            mTabFood.setCompoundDrawablesWithIntrinsicBounds(0,
                     R.drawable.ic_food,0,0);
         }
         if(mHotelFragment != null){
             transaction.hide(mHotelFragment);
-            mTextHotel.setTextColor(getResources()
-                    .getColor(R.color.colorText));
-            mTextHotel.setCompoundDrawablesWithIntrinsicBounds(0,
+            mTabHotel.setTextColor(getResources().getColor(R.color.colorText));
+            mTabHotel.setCompoundDrawablesWithIntrinsicBounds(0,
                     R.drawable.ic_hotel,0,0);
         }
     }
